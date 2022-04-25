@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Kissablogi2", 
-    "author": "Iida Peltonen",
-    "url": "www.kissoja.fi"
+    "title": "Kasviblogi", 
+    "author": "Hanna",
+    "url": "www.kasveja.fi"
 
 }
