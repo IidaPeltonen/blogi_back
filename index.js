@@ -17,7 +17,7 @@ const requestLogger = (request, response, next) => {
 app.use(express.json())
 app.use(requestLogger)
 app.use(cors())
-app.use(express.static('build'))
+//app.use(express.static('build'))
 
 app.get('/', (req, res) => {
   res.send('<h1>Moi!</h1>')
@@ -26,25 +26,28 @@ app.get('/', (req, res) => {
 //uuden luonti
 app.post('/api/blogs', (request, response, next) => {
   const body = request.body
+  console.log(body)
 
   Blog.find({})
     .then(result => {
       //tarkistetaan onko nimi jo luettelossa
       const checkBlogs = result.some(
-        findBlog => findBlog.name.toLowerCase() === body.name.toLowerCase()
+        findBlog => findBlog.title.toLowerCase() === body.title.toLowerCase()
       )
 
       //jos on
       if (checkBlogs) {
         return response.status(400).json({
-          error: 'Nimi on jo luettelossa!'
+          error: 'Blogi on jo luettelossa!'
         })
       }
       //jos ei
       else {
         const newBlog = new Blog({
-          name: body.name,
-          number: body.number
+          title: body.title,
+          author: body.author,
+          url: body.url,
+          likes: body.likes
         })
         newBlog
           .save()
@@ -94,11 +97,11 @@ app.get('/api/blogs/:id', (request, response, next) => {
 
 //vanhan päivitys
 app.put('/api/blogs/:id', (request, response, next) => {
-  const { name, number } = request.body
+  const { title, author, url, likes } = request.body
 
   Blog.findByIdAndUpdate(
     request.params.id,
-    { name, number },
+    { title, author, url, likes },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(result => {

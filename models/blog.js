@@ -2,8 +2,8 @@
 
 const mongoose = require('mongoose')
 
+//const url = `mongodb+srv://fullstack:fullstack2022@cluster0.0sxpk.mongodb.net/blogApp?retryWrites=true&w=majority`
 const url = process.env.MONGODB_URI
-
 console.log('connecting to', url)
 
 mongoose
