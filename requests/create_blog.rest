@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "name": "Lotta Karjalainen",
+    "number": "04511111"
+    "title": "Kissablogi", 
+    "author": "Iida Peltonen",
+    "url": "www.kissoja.fi",
+    "likes": 100000
+}
