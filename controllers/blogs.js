@@ -2,10 +2,11 @@
 
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 //kaikkien luettelo
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+  const blogs = await Blog.find({}).populate('user', { uname: 1, name: 1, id: 1 })
   response.json(blogs)
 })
 
@@ -26,13 +27,15 @@ blogsRouter.get('/:id', (request, response, next) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
+  const user = await User.findById(body.userId)
+  console.log('user: ', user)
 
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
-
+    user: user._id
   })
   //jos tykkäykset on tyhjä
   if (blog.likes === undefined){
@@ -43,6 +46,7 @@ blogsRouter.post('/', async (request, response) => {
     response.status(400).json(request.body)
   } else {
     const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
     response.status(201).json(savedBlog)
   }
 })
