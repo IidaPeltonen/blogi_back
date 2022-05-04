@@ -14,7 +14,9 @@ const totalLikes = blogs => {
     return 0
   }
   //muuten
-  else {
+  else if (blogs.length === undefined) {
+    return blogs[0].likes
+  } else {
     const summa = blogs.reduce((pre, cur) => {
       return pre + cur.likes
     }, 0)
@@ -29,7 +31,9 @@ const favoriteBlog = blogs => {
     return 0
   }
   //muuten
-  const max = blogs.reduce((pre, cur) => (pre.likes > cur.likes ? pre : cur))
+  const max = blogs.reduce((prev, current) =>
+    prev.likes > current.likes ? prev : current
+  )
   //haetaan sen blogin indeksi, jolla on eniten tykkäyksiä
   const index = blogs.findIndex(object => {
     return object.likes === max.likes

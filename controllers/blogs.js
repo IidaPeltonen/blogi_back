@@ -4,11 +4,9 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 //kaikkien luettelo
-blogsRouter.get('/', (request, response) => {
-  Blog.find({}).then(blogs => {
-    console.log('huhuu')
-    response.json(blogs)
-  })
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+  response.json(blogs)
 })
 
 //haku id-numerolla
@@ -25,63 +23,67 @@ blogsRouter.get('/:id', (request, response, next) => {
 })
 
 //uuden luonti
-blogsRouter.post('/', (request, response, next) => {
+blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
-  Blog.find({})
-    .then(result => {
-      //tarkistetaan onko nimi jo luettelossa
-      const checkBlogs = result.some(
-        findBlog => findBlog.title.toLowerCase() === body.title.toLowerCase()
-      )
 
-      //jos on
-      if (checkBlogs) {
-        return response.status(400).json({
-          error: 'Blogi on jo luettelossa!'
-        })
-      }
-      //jos ei
-      else {
-        const newBlog = new Blog({
-          title: body.title,
-          author: body.author,
-          url: body.url,
-          likes: body.likes
-        })
-        newBlog
-          .save()
-          .then(savedBlog => {
-            response.json(savedBlog)
-          })
-          .catch(error => next(error))
-      }
-    })
-    .catch(error => next(error))
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+
+  })
+  //jos tykkäykset on tyhjä
+  if (blog.likes === undefined){
+    blog.likes = 0
+  }
+  //jos otsikko tai url puuttuu
+  if (blog.title === undefined || blog.url === undefined){
+    response.status(400).json(request.body)
+  } else {
+    const savedBlog = await blog.save()
+    response.status(201).json(savedBlog)
+  }
 })
 
 //poisto id:n perusteella
-blogsRouter.delete('/:id', (request, response, next) => {
-  Blog.findByIdAndRemove(request.params.id)
-    .then(result => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
+blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 //vanhan päivitys
-blogsRouter.put('/:id', (request, response, next) => {
-  const { title, author, url, likes } = request.body
+blogsRouter.put('/:id', async (request, response) => {
+  const body = request.body
 
-  Blog.findByIdAndUpdate(
-    request.params.id,
-    { title, author, url, likes },
-    { new: true, runValidators: true, context: 'query' }
-  )
-    .then(result => {
-      response.json(result)
-    })
-    .catch(error => next(error))
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes
+  }
+  console.log('put: ', blog)
+  console.log('request.params: ', request.params)
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  response.json(updatedBlog)
 })
+
+module.exports = blogsRouter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = blogsRouter
