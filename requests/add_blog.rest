@@ -8,3 +8,5 @@ Authorization: bearer vääräeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ
     "url": "jokuvaara.fi",
     "likes": 1
 }
+
+# tallennetaan uusi blogi Pomon tunnuksilla kirjautuneena
