@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer vääräeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBvbW8iLCJpZCI6IjYyNzI2N2FlODM2Mzg0OGVlYjAzZDg4OSIsImlhdCI6MTY1MTY2Njg2MX0.VXgF8eE9XP-QwzXe-6w38IbX-CDK37arYiVFtWrSKgg
+
+{
+    "title": "väär-bearer-blogi",
+    "author": "Iida Peltonen",
+    "url": "jokuvaara.fi",
+    "likes": 1
+}
