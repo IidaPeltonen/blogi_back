@@ -26,6 +26,7 @@ blogsRouter.get('/:id', (request, response, next) => {
 //uuden luonti
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
+  console.log(body)
 
   const user = await User.findById(body.userId)
   console.log('user: ', user)
