@@ -12,7 +12,7 @@ describe('When there is only one user at db', () => {
     const newUser = {
       uname: 'Iida',
       name: 'Iida Peltonen',
-      password: 'passeord'
+      password: 'password'
     }
     //tarkistetaan tulos
     const result = await api

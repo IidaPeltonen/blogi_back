@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* Iida Peltonen 2022 */
 
 const mongoose = require('mongoose')
